@@ -4169,7 +4169,7 @@ static int __vsync_retire_setup(struct msm_fb_data_type *mfd)
 		return -ENOMEM;
 	}
 
- 	sched_setscheduler(mdp5_data->thread, SCHED_FIFO, &param);
+	sched_setscheduler(mdp5_data->thread, SCHED_FIFO, &param);
 
 	mfd->mdp_sync_pt_data.get_retire_fence = __vsync_retire_get_fence;
 
