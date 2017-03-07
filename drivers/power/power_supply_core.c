@@ -18,7 +18,6 @@
 #include <linux/err.h>
 #include <linux/power_supply.h>
 #include <linux/thermal.h>
-#include <linux/delay.h>
 #include "power_supply.h"
 
 /* exported for the APM Power driver, APM emulation */
@@ -267,40 +266,6 @@ int power_supply_set_low_power_state(struct power_supply *psy, int value)
 }
 EXPORT_SYMBOL(power_supply_set_low_power_state);
 
-#ifdef CONFIG_MACH_WT88047
-int power_supply_get_battery_charge_state(struct power_supply *psy)
-{
-	union power_supply_propval ret = {0,};
-
-	if (!psy) {
-		pr_err("%s: power supply is NULL\n", __func__);
-		return 0;
-	}
-
-	psy->get_property(psy, POWER_SUPPLY_PROP_ONLINE, &ret);
-	pr_debug("%s: online: %d\n", __func__, ret.intval);
-
-	return ret.intval;
-}
-EXPORT_SYMBOL(power_supply_get_battery_charge_state);
-#endif
-
-/**
- * power_supply_set_dp_dm -
- * @psy:	the power supply to control
- * @value:	value to be passed to the power_supply
- */
-int power_supply_set_dp_dm(struct power_supply *psy, int value)
-{
-	const union power_supply_propval ret = {value, };
-
-	if (psy->set_property)
-		return psy->set_property(psy, POWER_SUPPLY_PROP_DP_DM,
-				&ret);
-	return -ENXIO;
-}
-EXPORT_SYMBOL(power_supply_set_dp_dm);
-
 static int __power_supply_changed_work(struct device *dev, void *data)
 {
 	struct power_supply *psy = (struct power_supply *)data;
@@ -333,9 +298,6 @@ static void power_supply_changed_work(struct work_struct *work)
 		power_supply_update_leds(psy);
 
 		kobject_uevent(&psy->dev->kobj, KOBJ_CHANGE);
-#ifdef CONFIG_MACH_WT88047
-		msleep(100);
-#endif
 		spin_lock_irqsave(&psy->changed_lock, flags);
 	}
 	if (!psy->changed)
