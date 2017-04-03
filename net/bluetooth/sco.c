@@ -501,9 +501,6 @@ static int sco_sock_connect(struct socket *sock, struct sockaddr *addr, int alen
 	if (!addr || addr->sa_family != AF_BLUETOOTH)
 		return -EINVAL;
 
-	if (alen < sizeof(struct sockaddr_sco))
-		return -EINVAL;
-
 	memset(&sa, 0, sizeof(sa));
 	len = min_t(unsigned int, sizeof(sa), alen);
 	memcpy(&sa, addr, len);
@@ -883,8 +880,7 @@ static int sco_sock_shutdown(struct socket *sock, int how)
 		sco_sock_clear_timer(sk);
 		__sco_sock_close(sk);
 
-		if (sock_flag(sk, SOCK_LINGER) && sk->sk_lingertime &&
-		    !(current->flags & PF_EXITING))
+		if (sock_flag(sk, SOCK_LINGER) && sk->sk_lingertime)
 			err = bt_sock_wait_state(sk, BT_CLOSED,
 						 sk->sk_lingertime);
 	}
@@ -904,8 +900,7 @@ static int sco_sock_release(struct socket *sock)
 
 	sco_sock_close(sk);
 
-	if (sock_flag(sk, SOCK_LINGER) && sk->sk_lingertime &&
-	    !(current->flags & PF_EXITING)) {
+	if (sock_flag(sk, SOCK_LINGER) && sk->sk_lingertime) {
 		lock_sock(sk);
 		err = bt_sock_wait_state(sk, BT_CLOSED, sk->sk_lingertime);
 		release_sock(sk);
