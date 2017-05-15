@@ -29,7 +29,7 @@ red='\033[0;31m'
 nocol='\033[0m'
 # Modify the following variable if you want to build
 export make clean && make mrproper
-export CROSS_COMPILE="/home/rahif/android/kernels/toolchains/uber5.3/bin/arm-eabi-"
+export CROSS_COMPILE="/home/rbuzumaki8/.kernel/uber/bin/arm-eabi-"
 export ARCH=arm
 export SUBARCH=arm
 make wt88047_defconfig
