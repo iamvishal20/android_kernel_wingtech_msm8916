@@ -3,7 +3,7 @@
 
 ## AnyKernel setup
 # EDIFY properties
-kernel.string=KILLA™ Kernel by Rahif M @ xda-developers
+kernel.string=
 do.devicecheck=0
 do.initd=1
 do.modules=0
