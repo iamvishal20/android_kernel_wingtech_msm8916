@@ -29,7 +29,7 @@ red='\033[0;31m'
 nocol='\033[0m'
 # Modify the following variable if you want to build
 export make clean && make mrproper
-export CROSS_COMPILE="/home/rahif/android/kernels/toolchains/gcc/bin/arm-eabi-"
+export CROSS_COMPILE="/home/rahif/android/kernels/toolchains/arm-lin-7/bin/arm-linaro-linux-androideabi-"
 export ARCH=arm
 export SUBARCH=arm
 make wt88047_defconfig
